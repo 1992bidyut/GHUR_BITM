@@ -1,4 +1,4 @@
-package bdnath.lictproject.info.ghur;
+package bdnath.lictproject.info.ghur.ProfileWork;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -7,10 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,34 +17,26 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import bdnath.lictproject.info.ghur.LoginActivity;
+import bdnath.lictproject.info.ghur.R;
 
 public class RegistationActivity extends AppCompatActivity {
     private ImageView profileImage;
@@ -224,7 +214,7 @@ public class RegistationActivity extends AppCompatActivity {
 
         info=new bdnath.lictproject.info.ghur.FireBasePojoClass.UserInfo(userName,userEmail,gender,userDoB,userCity,userCountry,profileImagePath);
         profileRef.child(user.getUid()).setValue(info);
-        //startActivity(new Intent(RegistationActivity.this,LoginActivity.class));
+        startActivity(new Intent(RegistationActivity.this,LoginActivity.class));
     }
 
     public void create(View view) {

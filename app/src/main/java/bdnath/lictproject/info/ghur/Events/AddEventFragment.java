@@ -56,12 +56,12 @@ public class AddEventFragment extends Fragment {
     private DatabaseReference eventRef;
     private FirebaseUser user;
     private FirebaseAuth auth;
-    private StorageReference storageReference;
-    private StorageReference userStorageReference;
+/*    private StorageReference storageReference;
+    private StorageReference userStorageReference;*/
 
-    private Uri proImagePath=null;
+    /*private Uri proImagePath=null;
     private Bitmap proBitmap;
-    private String profileImagePath;
+    private String profileImagePath;*/
 
     private String title;
     private String place;
@@ -185,8 +185,7 @@ public class AddEventFragment extends Fragment {
                     return;
                 }
 
-
-                EventHandler handler=new EventHandler(id,title,place,cost,startDate,endDate,detail);
+                EventHandler handler=new EventHandler(id,title,place,cost,startDate,endDate,detail,0);
                 eventRef.child(user.getUid()).child(id).setValue(handler);
                 listener.goMainView();
             }

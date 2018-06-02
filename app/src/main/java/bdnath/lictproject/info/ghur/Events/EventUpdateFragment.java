@@ -180,7 +180,7 @@ public class EventUpdateFragment extends Fragment {
                     return;
                 }
 
-                EventHandler handler=new EventHandler(id,title,place,cost,startDate,endDate,detail);
+                EventHandler handler=new EventHandler(id,title,place,cost,startDate,endDate,detail,0);
                 eventRef.child(user.getUid()).child(id).setValue(handler);
                 listener.goMainView();
             }

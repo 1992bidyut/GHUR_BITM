@@ -1,7 +1,6 @@
 package bdnath.lictproject.info.ghur;
 
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.Serializable;
-
+import bdnath.lictproject.info.ghur.ProfileWork.RegistationActivity;
 import bdnath.lictproject.info.ghur.SharedPreference.LoginPreferences;
 
 public class LoginActivity extends AppCompatActivity {

@@ -2,7 +2,6 @@ package bdnath.lictproject.info.ghur.ProfileWork;
 
 
 import android.app.DatePickerDialog;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,17 +22,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import bdnath.lictproject.info.ghur.Events.AddEventFragment;
-import bdnath.lictproject.info.ghur.FireBasePojoClass.EventHandler;
 import bdnath.lictproject.info.ghur.FireBasePojoClass.UserInfo;
 import bdnath.lictproject.info.ghur.R;
-import bdnath.lictproject.info.ghur.RegistationActivity;
 
 /**
  * A simple {@link Fragment} subclass.

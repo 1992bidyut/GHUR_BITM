@@ -31,5 +31,6 @@
     <string name="weather_api_key">2eb2eff94cbf06aca423f6d8800db37a</string>
     <string name="search_hint">search city</string>
     <string name="map_api_key">AIzaSyA44twPs38hN3sWYBwOSojVD-zhjvzqjTM</string>
+    <string name="direction_api_key">AIzaSyA44twPs38hN3sWYBwOSojVD-zhjvzqjTM</string>
     <string name="SET_ERROR_MSG">Empty field</string>
 </resources>

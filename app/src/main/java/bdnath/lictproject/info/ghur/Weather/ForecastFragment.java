@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -45,6 +46,7 @@ public class ForecastFragment extends Fragment {
     private GraphView TempGraph;
     private GraphView humidityGraph;
     private GraphView cloudGraph;
+    private TextView scaleTV;
     private static final String CURRENT_BASE_URL="http://api.openweathermap.org/data/2.5/";
 
     private ForecastLatLongService latLongService;
@@ -63,6 +65,12 @@ public class ForecastFragment extends Fragment {
         TempGraph=view.findViewById(R.id.TempGraph);
         humidityGraph=view.findViewById(R.id.humidityGraph);
         cloudGraph=view.findViewById(R.id.cloudGraph);
+        scaleTV=view.findViewById(R.id.scaleTV);
+        if(WeatherFragment.fahrenhite){
+            scaleTV.setText("scaled in "+"\u00b0"+"F");
+        }else {
+            scaleTV.setText("scaled in "+"\u00b0"+"C");
+        }
 
         getWeatherData(WeatherFragment.latitude,WeatherFragment.longitude);
         return view;
@@ -89,7 +97,11 @@ public class ForecastFragment extends Fragment {
                     //Maximum Temperature
                     DataPoint[] dataPointsMax=new DataPoint[lists.size()];
                     for (int i=0 ; i < lists.size(); i++){
-                        dataPointsMax[i]=new DataPoint(i,lists.get(i).getMain().getTempMax());
+                        if (WeatherFragment.fahrenhite){
+                            dataPointsMax[i]=new DataPoint(i,(lists.get(i).getMain().getTempMax()* 9/5 +32));
+                        }else {
+                            dataPointsMax[i]=new DataPoint(i,lists.get(i).getMain().getTempMax());
+                        }
                     }
                     LineGraphSeries<DataPoint> seriesMax = new LineGraphSeries<DataPoint>(dataPointsMax);
                     TempGraph.addSeries(seriesMax);
@@ -99,7 +111,12 @@ public class ForecastFragment extends Fragment {
                     //Minimum Temperature
                     DataPoint[] dataPointsMin=new DataPoint[lists.size()];
                     for (int i=0 ; i < lists.size(); i++){
-                        dataPointsMin[i]=new DataPoint(i,lists.get(i).getMain().getTempMin());
+                        if (WeatherFragment.fahrenhite){
+                            dataPointsMin[i]=new DataPoint(i,(lists.get(i).getMain().getTempMin()* 9/5 +32));
+                        }else {
+                            dataPointsMin[i]=new DataPoint(i,lists.get(i).getMain().getTempMin());
+                        }
+
                     }
                     LineGraphSeries<DataPoint> seriesMin = new LineGraphSeries<DataPoint>(dataPointsMin);
                     TempGraph.addSeries(seriesMin);
