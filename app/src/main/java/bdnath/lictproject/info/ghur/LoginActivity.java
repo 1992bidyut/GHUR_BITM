@@ -41,9 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         if(preferences.getStatus()){
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
         }
-        /*if (preferences.getStatus()&& preferences.getAdminEmail()!=null){
-            logInWithFirebase(preferences.getAdminEmail(),preferences.getAdminPassword());
-        }*/
     }
 
     public void logIn(View view) {

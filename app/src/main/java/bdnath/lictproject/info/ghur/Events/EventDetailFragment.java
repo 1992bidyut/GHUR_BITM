@@ -97,6 +97,7 @@ public class EventDetailFragment extends Fragment {
         user=auth.getCurrentUser();
         roofRef= FirebaseDatabase.getInstance().getReference();
         eventRef=roofRef.child("Events");
+        eventRef.keepSynced(true);
         eventExpenseRoot=eventRef.child("Expenses");
         eventExpenseRef=eventExpenseRoot.child(handler.getEventID());
 

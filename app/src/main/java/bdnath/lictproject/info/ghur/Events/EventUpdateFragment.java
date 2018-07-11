@@ -99,6 +99,7 @@ public class EventUpdateFragment extends Fragment {
         user=auth.getCurrentUser();
         roofRef= FirebaseDatabase.getInstance().getReference();
         eventRef=roofRef.child("Events");
+        eventRef.keepSynced(true);
 
         doneBTN=view.findViewById(R.id.doneBTN);
         cancleBTN=view.findViewById(R.id.canlceBTN);

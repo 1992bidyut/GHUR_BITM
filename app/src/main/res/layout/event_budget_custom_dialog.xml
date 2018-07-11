@@ -124,19 +124,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
         <Button
             android:id="@+id/add_extra"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Extera money"
+            android:textColor="#ffffff"
+            android:padding="3dp"
+            android:background="@drawable/round_button"
             android:textAllCaps="false"
+            android:layout_margin="2dp"
             android:textSize="12sp"/>
         <Button
             android:id="@+id/add_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Expence"
+            android:textColor="#ffffff"
+            android:padding="3dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/round_button"
             android:textAllCaps="false"
             android:textSize="12sp"/>
     </LinearLayout>

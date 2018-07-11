@@ -8,6 +8,11 @@ public class MarkerItem implements ClusterItem {
     private String title;
     private String snippet;
 
+    public MarkerItem(LatLng latLng, String title) {
+        this.latLng = latLng;
+        this.title = title;
+    }
+
     public MarkerItem(LatLng latLng) {
         this.latLng = latLng;
     }

@@ -91,9 +91,7 @@ public class CurrentFragment extends Fragment {
     ///get weather data to view
     private void getWeatherData(double latitude,double longitude) {
         String apiKey = getString(R.string.weather_api_key);
-        // Toast.makeText(getContext(),latitude+" degree "+longitude+" degree",Toast.LENGTH_SHORT).show();
         String customUrl = String.format("weather?lat=%f&lon=%f&units=%s&appid=%s",latitude,longitude,units,apiKey);
-        //String customUrl = String.format("weather?q=Dhaka&units=%s&appid=%s",units,apiKey);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(CURRENT_BASE_URL)
@@ -108,7 +106,6 @@ public class CurrentFragment extends Fragment {
             @Override
             public void onResponse(Call<CurentWearherLatLongResponse> call, Response<CurentWearherLatLongResponse> response) {
                 if(response.code() == 200){
-                    //Toast.makeText(getContext(),"OK at API calling",Toast.LENGTH_SHORT).show();
                     CurentWearherLatLongResponse currentWeatherResponse =
                             response.body();
                     String logo= PHOTO_URL+currentWeatherResponse.getWeather()
@@ -168,9 +165,6 @@ public class CurrentFragment extends Fragment {
                 try {
                     if (response.code() == 200) {
                         CurrentWeatherCity currentWeatherResponse = response.body();
-                        /*String logo= PHOTO_URL+currentWeatherResponse.getWeather()
-                                .get(0).getIcon()+".png";
-                        Picasso.get().load(Uri.parse(logo)).into(weatherLogo);*/
                         cityTV.setText(currentWeatherResponse.getName());
                         sunriseTV.setText(unixToTime(currentWeatherResponse.getSys().getSunrise()));
                         sunsetTV.setText(unixToTime(currentWeatherResponse.getSys().getSunset()));
@@ -190,31 +184,7 @@ public class CurrentFragment extends Fragment {
                         float res= (float) (wind*(3600/1000));
                         windTV.setText(res+"km/h");
                         ///////////////////////////////////
-                        /*temTv.setText(String.valueOf(currentWeatherResponse.getMain().getTemp()));
-                        cityTv.setText(currentWeatherResponse.getName());
-                        minTv.setText(String.valueOf(currentWeatherResponse.getMain().getTempMin()));
-                        maxTv.setText(String.valueOf(currentWeatherResponse.getMain().getTempMax()));
-                        huminityTv.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()) + "%");
-                        pressureTv.setText(String.valueOf(currentWeatherResponse.getMain().getPressure()) + " hPa");
-                        //date
-                        long datetime = currentWeatherResponse.getDt();
-                        Date date = new Date(datetime*1000);
-                        SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
-                        String dateText = df2.format(date);
-                        dateTv.setText(dateText);
 
-                        //time
-                        long millisecond=currentWeatherResponse.getSys().getSunrise();
-                        String dateString = DateFormat.format("HH:mm aa", new Date(millisecond*1000)).toString();
-                        sunriseTv.setText(dateString);
-
-                        long mil=currentWeatherResponse.getSys().getSunset();
-                        String dateSun = DateFormat.format("HH:mm aa", new Date(mil*1000)).toString();
-                        sunsetTv.setText(dateSun);*/
-
-                        //Image
-
-                        //String photo = currentWeatherResponse.getWeather().;
                         try {
                             String logo= PHOTO_URL+currentWeatherResponse.getWeather()
                                     .get(0).getIcon()+".png";

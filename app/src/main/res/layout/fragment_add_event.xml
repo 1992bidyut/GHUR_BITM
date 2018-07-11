@@ -60,11 +60,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAllCaps="false"
+                    android:textColor="#ffffff"
+                    android:padding="3dp"
+                    android:layout_margin="1dp"
+                    android:background="@drawable/round_button"
                     android:text="Done" />
                 <Button
                     android:id="@+id/canlceBTN"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:padding="3dp"
+                    android:layout_margin="1dp"
+                    android:background="@drawable/round_button"
                     android:textAllCaps="false"
                     android:text="Cancle" />
             </LinearLayout>

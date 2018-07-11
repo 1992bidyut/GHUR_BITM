@@ -1,9 +1,16 @@
 package bdnath.lictproject.info.ghur.ProfileWork;
 
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,17 +25,30 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import bdnath.lictproject.info.ghur.FireBasePojoClass.UserInfo;
+import bdnath.lictproject.info.ghur.MainActivity;
 import bdnath.lictproject.info.ghur.R;
+
+import static android.support.v4.provider.FontsContractCompat.FontRequestCallback.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,7 +75,6 @@ public class EditProfileFragment extends Fragment {
 
 
     private String userName;
-    private String userEmail;
     private String userDoB;
     private String userCity;
     private String userCountry;
@@ -90,6 +109,9 @@ public class EditProfileFragment extends Fragment {
 
         auth=FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
+        roofRef= FirebaseDatabase.getInstance().getReference();
+        profileRef=roofRef.child("profile");
+        profileRef.keepSynced(true);
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -183,8 +205,6 @@ public class EditProfileFragment extends Fragment {
                 info.setFullName(userName);
                 info.setGender(gender);
 
-                roofRef= FirebaseDatabase.getInstance().getReference();
-                profileRef=roofRef.child("profile");
                 profileRef.child(user.getUid()).setValue(info);
                 listener.getProfileView();
             }
@@ -200,9 +220,11 @@ public class EditProfileFragment extends Fragment {
         return view;
     }
 
+
     public interface GoMainListener{
         public void getMainView();
         public void getProfileView();
     }
+
 
 }

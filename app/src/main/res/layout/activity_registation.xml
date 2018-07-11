@@ -128,12 +128,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Create"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/round_button"
                     android:textAllCaps="false"
                     android:onClick="create"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cancle"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/round_button"
                     android:textAllCaps="false"
                     android:onClick="cancle"/>
             </LinearLayout>

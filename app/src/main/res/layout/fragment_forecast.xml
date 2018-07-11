@@ -18,7 +18,7 @@
         android:textColor="@color/colorPrimaryDark"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#1bba4e"
         android:layout_height="120dp"
         android:id="@+id/TempGraph" />
     <LinearLayout
@@ -65,7 +65,7 @@
         android:textColor="@color/colorPrimaryDark"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#1bba4e"
         android:layout_height="120dp"
         android:id="@+id/humidityGraph" />
     <TextView
@@ -78,7 +78,7 @@
         android:textColor="@color/colorPrimaryDark"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#1bba4e"
         android:layout_height="120dp"
         android:id="@+id/cloudGraph" />
 

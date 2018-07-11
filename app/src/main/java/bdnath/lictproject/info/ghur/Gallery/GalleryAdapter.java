@@ -56,9 +56,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
             Picasso.get().load(path)
                     .resize(300, 300).onlyScaleDown() // the image will only be resized if it's bigger than 6000x2000 pixels.
                     .into(holder.imageView);
-            /*Picasso.get().load(Uri.parse(urls.get(position).getUrl()))
-                    .resize(300, 300).onlyScaleDown() // the image will only be resized if it's bigger than 6000x2000 pixels.
-                    .into(holder.imageView);*/
         }else {
             Picasso.get().load(Uri.parse(urls.get(position).getUrl()))
                     .resize(300, 300).onlyScaleDown() // the image will only be resized if it's bigger than 6000x2000 pixels.

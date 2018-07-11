@@ -32,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -84,7 +86,7 @@ import bdnath.lictproject.info.ghur.Weather.WeatherFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,AddEventFragment.MainViewListener,
         EventsViewFragment.DetailViewListener,EventDetailFragment.EventUpdateListener,
-        ProfileViewFragment.EditProfileListener,EditProfileFragment.GoMainListener, OnMapReadyCallback{
+        ProfileViewFragment.EditProfileListener,EditProfileFragment.GoMainListener{
 
     private LoginPreferences preferences;
     private FirebaseAuth auth;
@@ -101,12 +103,9 @@ public class MainActivity extends AppCompatActivity
     private String photoPath = null;
 
     private View nav_view;
-    private GoogleMapOptions mapOptions;
-    private GoogleMap map;
-    private ClusterManager<MarkerItem>clusterManager;
 
+    private FloatingActionButton fab;
 
-    //FirebaseDataCom firebaseDataCom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);;
         transaction.commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab= (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -252,8 +251,8 @@ public class MainActivity extends AppCompatActivity
                 fragment=new GalleryFragment();
                 break;
             case R.id.nav_location:
-                //fragment=new LocationFragment();
-                getMapWorkFragment();
+                fragment=new LocationFragment();
+                //getMapWorkFragment();
                 break;
             case R.id.nav_weather:
                 fragment=new WeatherFragment();
@@ -364,9 +363,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==111&&resultCode==RESULT_OK){
-            /*Bundle extras=data.getExtras();
-            Bitmap bitmap= (Bitmap) extras.get("data");*/
-            uploadProPic();
+            uploadPic();
+        }
+        if (requestCode==505&&resultCode==RESULT_OK){
+            Place place = PlacePicker.getPlace(this,data);
+            Toast.makeText(this,place.getName(),Toast.LENGTH_SHORT).show();
         }
     }
     private File createImageFile() throws IOException{
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity
         return imageFile;
     }
 
-    private void uploadProPic(){
+    private void uploadPic(){
         final ProgressDialog progressDialog=new ProgressDialog(this);
         progressDialog.setTitle("Uploading...");
         progressDialog.show();
@@ -389,7 +390,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         progressDialog.dismiss();
-                        downloadProPic(imageName);
+                        downloadPic(imageName);
                         Toast.makeText(MainActivity.this,"Upload completed",
                                 Toast.LENGTH_LONG).show();
                     }
@@ -410,7 +411,7 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
-    private void downloadProPic(String imageName){
+    private void downloadPic(String imageName){
         StorageReference proImgStorRef=userStorageReference.child("gallery/"+imageName+".jpg");
         proImgStorRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -440,49 +441,4 @@ public class MainActivity extends AppCompatActivity
        transaction.commit();
     }
 
-    //MapWork///
-    private void getMapWorkFragment(){
-        mapOptions = new GoogleMapOptions();
-        mapOptions.zoomControlsEnabled(true);
-        //mapOptions.mapType(GoogleMap.)
-
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance(mapOptions);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragmentContainer, mapFragment);
-        ft.commit();
-        mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        final List<MarkerItem>items=new ArrayList<>();
-        clusterManager=new ClusterManager<MarkerItem>(this,map);
-        map.setOnCameraIdleListener(clusterManager);
-        map.setOnMarkerClickListener(clusterManager);
-        LatLng kb = new LatLng(23.750854, 90.393527);
-
-        // map.addMarker(new MarkerOptions().title("BDBL").position(kb));
-        // map.moveCamera(CameraUpdateFactory.newLatLngZoom(kb, 15));
-        //////////////////
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission
-                    .ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},111);
-            return;
-        }
-        map.setMyLocationEnabled(true);
-
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                MarkerItem markerItem=new MarkerItem(latLng);
-                items.add(markerItem);
-                Marker marker=map.addMarker(new MarkerOptions().title("Custom").position(latLng));
-                LatLng endlatlng=marker.getPosition();
-                Toast.makeText(MainActivity.this,"lat:"+endlatlng.latitude,Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
 }

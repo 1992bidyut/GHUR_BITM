@@ -95,6 +95,9 @@ public class RegistationActivity extends AppCompatActivity {
 
         auth=FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
+        roofRef= FirebaseDatabase.getInstance().getReference();
+        profileRef=roofRef.child("profile");
+        profileRef.keepSynced(true);
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -208,10 +211,6 @@ public class RegistationActivity extends AppCompatActivity {
         });
     }
     private void insertProfileInfo(){
-        roofRef= FirebaseDatabase.getInstance().getReference();
-        profileRef=roofRef.child("profile");
-
-
         info=new bdnath.lictproject.info.ghur.FireBasePojoClass.UserInfo(userName,userEmail,gender,userDoB,userCity,userCountry,profileImagePath);
         profileRef.child(user.getUid()).setValue(info);
         startActivity(new Intent(RegistationActivity.this,LoginActivity.class));
