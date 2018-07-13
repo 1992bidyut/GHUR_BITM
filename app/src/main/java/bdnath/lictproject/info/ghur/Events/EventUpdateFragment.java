@@ -99,6 +99,7 @@ public class EventUpdateFragment extends Fragment {
         user=auth.getCurrentUser();
         roofRef= FirebaseDatabase.getInstance().getReference();
         eventRef=roofRef.child("Events");
+        eventRef.keepSynced(true);
 
         doneBTN=view.findViewById(R.id.doneBTN);
         cancleBTN=view.findViewById(R.id.canlceBTN);
@@ -180,7 +181,7 @@ public class EventUpdateFragment extends Fragment {
                     return;
                 }
 
-                EventHandler handler=new EventHandler(id,title,place,cost,startDate,endDate,detail);
+                EventHandler handler=new EventHandler(id,title,place,cost,startDate,endDate,detail,0);
                 eventRef.child(user.getUid()).child(id).setValue(handler);
                 listener.goMainView();
             }

@@ -11,14 +11,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Temperature Grap"
+        android:text="Temperature"
         android:textSize="16sp"
         android:padding="2dp"
         android:textStyle="italic"
         android:textColor="@color/colorPrimaryDark"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#1bba4e"
         android:layout_height="120dp"
         android:id="@+id/TempGraph" />
     <LinearLayout
@@ -43,32 +43,42 @@
             android:padding="2dp"
             android:background="#2846f2"
             android:textColor="#ffffff"/>
+        <TextView
+            android:id="@+id/scaleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="10sp"
+            android:layout_margin="1dp"
+            android:padding="2dp"
+            android:background="#0adcef"
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Humidity Grap"
+        android:text="Humidity"
         android:textSize="16sp"
         android:padding="2dp"
         android:textStyle="italic"
         android:textColor="@color/colorPrimaryDark"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#1bba4e"
         android:layout_height="120dp"
         android:id="@+id/humidityGraph" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cloudiness Grap"
+        android:text="Cloudiness"
         android:textSize="16sp"
         android:padding="2dp"
         android:textStyle="italic"
         android:textColor="@color/colorPrimaryDark"/>
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
-        android:background="@color/colorPrimary"
+        android:background="#1bba4e"
         android:layout_height="120dp"
         android:id="@+id/cloudGraph" />
 

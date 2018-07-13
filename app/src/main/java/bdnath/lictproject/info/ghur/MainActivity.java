@@ -1,7 +1,9 @@
 package bdnath.lictproject.info.ghur;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,9 +13,11 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,6 +32,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,6 +55,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.maps.android.clustering.ClusterManager;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -49,18 +63,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import bdnath.lictproject.info.ghur.Events.AddEventFragment;
 import bdnath.lictproject.info.ghur.Events.EventDetailFragment;
 import bdnath.lictproject.info.ghur.Events.EventUpdateFragment;
 import bdnath.lictproject.info.ghur.Events.EventsViewFragment;
+import bdnath.lictproject.info.ghur.FireBasePojoClass.GalleryHandeler;
 import bdnath.lictproject.info.ghur.FireBasePojoClass.UserInfo;
 import bdnath.lictproject.info.ghur.Gallery.GalleryFragment;
 import bdnath.lictproject.info.ghur.Location.LocationFragment;
 import bdnath.lictproject.info.ghur.FireBasePojoClass.EventHandler;
+import bdnath.lictproject.info.ghur.Location.MarkerItem;
 import bdnath.lictproject.info.ghur.ProfileWork.EditProfileFragment;
 import bdnath.lictproject.info.ghur.ProfileWork.ProfileViewFragment;
+import bdnath.lictproject.info.ghur.ProfileWork.RegistationActivity;
 import bdnath.lictproject.info.ghur.SharedPreference.LoginPreferences;
 import bdnath.lictproject.info.ghur.Weather.WeatherFragment;
 
@@ -73,15 +92,20 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth auth;
     private FirebaseUser currenUser;
 
+    private DatabaseReference roofRef;
+    private DatabaseReference galleryRef;
+    private StorageReference storageReference;
+    private StorageReference userStorageReference;
     private FirebaseDatabase database;
-    private DatabaseReference rootRef;
+    private DatabaseReference profileRoot;
+
+    private Uri proImagePath=null;
+    private String photoPath = null;
 
     private View nav_view;
 
-    private Uri proImagePath=null;
+    private FloatingActionButton fab;
 
-
-    //FirebaseDataCom firebaseDataCom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +118,10 @@ public class MainActivity extends AppCompatActivity
         currenUser=auth.getCurrentUser();
 
         database=FirebaseDatabase.getInstance();
-        rootRef=database.getReference().child("profile");
+        profileRoot=database.getReference().child("profile");
+
+        storageReference= FirebaseStorage.getInstance().getReference();
+        userStorageReference=storageReference.child(currenUser.getUid());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);;
         transaction.commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab= (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,7 +168,7 @@ public class MainActivity extends AppCompatActivity
         userEmail.setText(currenUser.getEmail());
         final ImageView proImg=nav_view.findViewById(R.id.profileIMG);
 
-        rootRef.child(currenUser.getUid()).addValueEventListener(new ValueEventListener() {
+        profileRoot.child(currenUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserInfo info=dataSnapshot.getValue(UserInfo.class);
@@ -214,14 +241,18 @@ public class MainActivity extends AppCompatActivity
     private void fragmentDisplay(int id){
         Fragment fragment=null;
         switch (id){
+            case R.id.nav_home:
+                fragment=new EventsViewFragment();
+                break;
             case R.id.nav_camera:
-                //openCamera();
+                openCamera();
                 break;
             case R.id.nav_gallery:
                 fragment=new GalleryFragment();
                 break;
             case R.id.nav_location:
                 fragment=new LocationFragment();
+                //getMapWorkFragment();
                 break;
             case R.id.nav_weather:
                 fragment=new WeatherFragment();
@@ -309,32 +340,105 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    /*public void openCamera() {
+    public void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null){
-            File file = null;
+            File file=null;
             try {
-                file = createImageFile();
+                file=createImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(file != null){
-                photoPath = file.getAbsolutePath();
-                Uri photoURI = FileProvider.getUriForFile(this,
+            if (file!=null){
+                photoPath=file.getAbsolutePath();
+                proImagePath = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         file);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,proImagePath);
                 startActivityForResult(intent,111);
             }
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==111&&resultCode==RESULT_OK){
+            uploadPic();
+        }
+        if (requestCode==505&&resultCode==RESULT_OK){
+            Place place = PlacePicker.getPlace(this,data);
+            Toast.makeText(this,place.getName(),Toast.LENGTH_SHORT).show();
+        }
+    }
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageName = "GHUR/JPEG_"+timeStamp;
+        String imageName = "GHUR_"+timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File imageFile = File.createTempFile(imageName,".jpg",storageDir);
         return imageFile;
-    }*/
+    }
+
+    private void uploadPic(){
+        final ProgressDialog progressDialog=new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        final String imageName = "GHUR_"+timeStamp;
+        StorageReference proImgStorRef=userStorageReference.child("gallery/"+imageName+".jpg");
+        proImgStorRef.putFile(proImagePath)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        downloadPic(imageName);
+                        Toast.makeText(MainActivity.this,"Upload completed",
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        progressDialog.dismiss();
+                        Toast.makeText(MainActivity.this,"ERROR: "+exception.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress=(100*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                progressDialog.setMessage(((int)progress)+"% Uploaded...");
+            }
+        });
+
+    }
+    private void downloadPic(String imageName){
+        StorageReference proImgStorRef=userStorageReference.child("gallery/"+imageName+".jpg");
+        proImgStorRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Got the download URL for 'users/me/profile.jpg'
+                String profileImagePath=uri.toString();
+                Toast.makeText(MainActivity.this,profileImagePath,Toast.LENGTH_LONG).show();
+                insertProfileInfo(profileImagePath);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+    }
+   private void insertProfileInfo(String url){
+        roofRef=FirebaseDatabase.getInstance().getReference();
+       galleryRef=roofRef.child("galleryURLs");
+       GalleryHandeler handler=new GalleryHandeler(url,galleryRef.push().getKey(),photoPath);
+       galleryRef.child(currenUser.getUid()).push().setValue(handler);
+
+       Fragment fragment=new GalleryFragment();
+       FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
+       transaction.replace(R.id.fragmentContainer,fragment);
+       transaction.addToBackStack(null);;
+       transaction.commit();
+    }
 
 }

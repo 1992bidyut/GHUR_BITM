@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".RegistationActivity"
+    tools:context=".ProfileWork.RegistationActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -128,12 +128,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Create"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/round_button"
                     android:textAllCaps="false"
                     android:onClick="create"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cancle"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/round_button"
                     android:textAllCaps="false"
                     android:onClick="cancle"/>
             </LinearLayout>

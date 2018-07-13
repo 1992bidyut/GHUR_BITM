@@ -11,11 +11,9 @@ public class EventHandler implements Serializable {
     private String eventEndDate;
     private String eventDetail;
     private String coverUrl;
+    private float extraExpense;
 
-    public EventHandler() {
-    }
-
-    public EventHandler(String eventID, String eventTitle, String eventPlace, float eventCost, String eventStartDate, String eventEndDate, String eventDetail, String coverUrl) {
+    public EventHandler(String eventID, String eventTitle, String eventPlace, float eventCost, String eventStartDate, String eventEndDate, String eventDetail, float extraExpense) {
         this.eventID = eventID;
         this.eventTitle = eventTitle;
         this.eventPlace = eventPlace;
@@ -23,22 +21,26 @@ public class EventHandler implements Serializable {
         this.eventStartDate = eventStartDate;
         this.eventEndDate = eventEndDate;
         this.eventDetail = eventDetail;
-        this.coverUrl = coverUrl;
+        this.extraExpense = extraExpense;
     }
+
+    public float getExtraExpense() {
+
+        return extraExpense;
+    }
+
+    public void setExtraExpense(float extraExpense) {
+        this.extraExpense = extraExpense;
+    }
+
+    public EventHandler() {
+    }
+
 
     public String getEventID() {
         return eventID;
     }
 
-    public EventHandler(String eventID, String eventTitle, String eventPlace, float eventCost, String eventStartDate, String eventEndDate, String eventDetail) {
-        this.eventID = eventID;
-        this.eventTitle = eventTitle;
-        this.eventPlace = eventPlace;
-        this.eventCost = eventCost;
-        this.eventStartDate = eventStartDate;
-        this.eventEndDate = eventEndDate;
-        this.eventDetail = eventDetail;
-    }
 
     public void setEventID(String eventID) {
         this.eventID = eventID;
